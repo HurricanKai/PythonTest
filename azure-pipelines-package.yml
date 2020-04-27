@@ -51,6 +51,11 @@ steps:
     codeCoverageTool: Cobertura
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
     reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+
+- script: |
+    pip install bandit
+    bandit -r ./testpkg/
+  displayName: Bandit Security Linting
   
 - script: |
     pip install wheel
