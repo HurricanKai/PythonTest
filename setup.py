@@ -1,11 +1,13 @@
 import setuptools
 
+from version import get_version
+
 with open("Readme.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="test-pkg-Kai-Jellinghaus",  # Replace with your own username
-    version="0.0.1",
+    version=get_version(pep440=True),
     author="Kai-Jellinghaus",
     author_email="contact@kaij.tech",
     description="A small example package",
