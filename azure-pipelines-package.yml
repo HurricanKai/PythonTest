@@ -65,4 +65,4 @@ steps:
     python setup.py sdist bdist_wheel
     
 - script: |
-   python -m twine upload -r "TestPackage" --config-file $(PYPIRC_PATH) dist/*
+   python -m twine upload -r "PythonTest/TestPackage" --config-file $(PYPIRC_PATH) dist/*
