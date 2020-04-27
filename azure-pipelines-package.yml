@@ -22,11 +22,6 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
-
-- task: TwineAuthenticate@1
-  displayName: 'Twine Authenticate'
-  inputs:
-    artifactFeed: 'PythonTest/TestPackage'
   
 - script: |
     python -m pip install flake8
@@ -64,5 +59,10 @@ steps:
 - script: |
     python setup.py sdist bdist_wheel
     
+- task: TwineAuthenticate@1
+  displayName: 'Twine Authenticate'
+  inputs:
+    artifactFeed: PythonTest/TestPackage
 - script: |
-   python -m twine upload -r "PythonTest/TestPackage" --config-file $(PYPIRC_PATH) dist/*
+    python -m twine upload -r "TestPackage" --skip-existing --config-file $(PYPIRC_PATH) ./dist/*.whl --verbose
+  displayName: Publish to Azure
