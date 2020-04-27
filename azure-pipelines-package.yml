@@ -54,7 +54,7 @@ steps:
 
 - script: |
     pip install bandit
-    bandit -r .
+    bandit -r ./testpkg/
   displayName: Bandit Security Linting
   
 - script: |
