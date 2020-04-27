@@ -14,4 +14,4 @@ def test_subtraction_large():
 
 
 def test_subtraction_negative():
-    assert sub(-5, -3) == -8
+    assert sub(-5, -3) == -2
