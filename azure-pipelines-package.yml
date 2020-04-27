@@ -22,6 +22,11 @@ steps:
   inputs:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
+  
+- script: |
+    python -m pip install flake8
+    flake8 .
+  displayName: 'Run lint tests'
 
 - script: |
     python -m pip install --upgrade pip
@@ -29,6 +34,34 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
+    pip install pytest
+    pip install pytest-cov
+    pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+  displayName: 'Test with pytest'
+  
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFiles: '**/test-*.xml'
+    testRunTitle: 'Publish test results for Python $(python.version)'
+    
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
+  
+- script: |
+    pip install wheel
+    pip install twine
+  displayName: 'Install Twine & Wheel"
+
+- scripts: |
+    python setup.py sdist bdist_wheel
+
+- task: TwineAuthenticate@0
+  inputs:
+    artifactFeed: 'PythonTest/TestPackage'
+    
+- script: |
+   twine upload -r "TestPackage" --config-file $(PYPIRC_PATH) dist/*
