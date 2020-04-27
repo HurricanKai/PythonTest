@@ -59,9 +59,10 @@ steps:
 - script: |
     python setup.py sdist bdist_wheel
 
-- task: TwineAuthenticate@0
+- task: TwineAuthenticate@1
+  displayName: 'Twine Authenticate'
   inputs:
     artifactFeed: 'PythonTest/TestPackage'
     
 - script: |
-   twine upload -r "TestPackage" --config-file $(PYPIRC_PATH) dist/*
+   python -m twine upload -r "TestPackage" --config-file $(PYPIRC_PATH) dist/*
